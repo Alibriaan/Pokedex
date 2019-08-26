@@ -42,6 +42,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ContactIcon from '@material-ui/icons/Contacts';
+import SmartIcon from '@material-ui/icons/Smartphone';
 import CodeIcon from '@material-ui/icons/Code';
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
@@ -132,10 +133,13 @@ sideMenuText:{
 	justifyContent: "center",
 	backgroundColor: red,
 },
-stick:{
-  postion: "fixed",
-  top: 0,
-}
+mobileButton:
+{
+  display: "block",
+  [theme.breakpoints.up('md')]: {
+    display: "none"
+    },
+},
 
 }));
 
@@ -211,6 +215,24 @@ const Header = observer(( props) =>
           </ListItem>
 		</a>
       </List>
+      <List className={classes.mobileButton}>
+      <Divider />
+      <ListItem button onClick= { () => (localStore.PokemonGet(10) )}>
+            <ListItemIcon><SmartIcon  /></ListItemIcon>
+		  <ListItemText primary="10 Pokemons"/>
+          </ListItem>
+          <ListItem button onClick= { () => (localStore.PokemonGet(20) )}>
+            <ListItemIcon><SmartIcon /></ListItemIcon>
+		  <ListItemText primary="20 Pokemons"/>
+          </ListItem>
+          <ListItem button onClick= { () => (localStore.PokemonGet(50) )}>
+            <ListItemIcon><SmartIcon /></ListItemIcon>
+		  <ListItemText primary="50 Pokemons"/>
+          </ListItem>
+      </List>
+
+
+      
     </div>
   );
 
@@ -239,9 +261,9 @@ const Header = observer(( props) =>
 			</Link>
           </Typography>
 	  <div className={classes.button} style={{ display: visibility()}}>
-          <Button  color="inherit" onClick= { () => (setTimeout(localStore.PokemonGet(10) , 1000))}>10 Pokemons</Button>
-	        <Button  color="inherit" onClick= { () => (setTimeout(localStore.PokemonGet(20) , 1000)) }>20 Pokemons</Button>
-	        <Button  color="inherit" onClick= { () => (setTimeout(localStore.PokemonGet(50) , 1500)) }>50 Pokemons</Button>
+          <Button  color="inherit" onClick= { () => (localStore.PokemonGet(10) )}>10 Pokemons</Button>
+	        <Button  color="inherit" onClick= { () => (localStore.PokemonGet(20)) }>20 Pokemons</Button>
+	        <Button  color="inherit" onClick= { () => (localStore.PokemonGet(50)) }>50 Pokemons</Button>
 	  </div>
 	  
 	  

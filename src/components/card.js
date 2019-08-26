@@ -104,7 +104,7 @@ const PokeCard = observer((props) =>
 
 	const classes = useStyles();
 	  	  const localStore = useContext(store)
-
+/*
 		  var fight = (prop) =>
 		  {
 			  
@@ -117,7 +117,7 @@ const PokeCard = observer((props) =>
 					  return "white";
 				  }
 		  }
-		  
+		  */
 
   return (
     <Card className={classes.card}>
@@ -136,7 +136,7 @@ const PokeCard = observer((props) =>
 	    <Avatar alt="Remy Sharp" src={props.ava} className={classes.avatarSize} />
 	  </Box>
         <Typography className={classes.types} color="textSecondary">
-          {props.types.map(item => (<div style={{backgroundColor : "#" + colors[item.type.name] , color: fight(item.type.name) }} className={classes.typesName}	><h5>{item.type.name}</h5></div>
+          {props.types.map(item => (<div style={{backgroundColor : "#" + ( item.type.name === "fighting" ? "FFFFFF" :colors[item.type.name]) , color: ( (item.type.name === "fighting" )? "DimGray": "White" ) }} className={classes.typesName}	><h5>{item.type.name}</h5></div>
   	))}
         </Typography>
       </CardContent>

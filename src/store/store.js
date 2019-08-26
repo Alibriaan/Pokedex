@@ -2,11 +2,8 @@
 
 import {
 	observable,
-//	computed,
 	action,
 	decorate,
-//	set,
-//	get
 } from 'mobx';
 
 import {
@@ -16,11 +13,8 @@ import {
 
 
 
-// Сохранка 25.08.19 ночь
-// Теги и форму вроде сделал
-// Сделать поиск при отсутствие покемонов с запросами 
-// Теперь идет до максималочки
-// Пофиксил перезапись массива покемонов
+// Сохранка 26.08.19 утро
+// Финал созидания
 
 
 class PokemonsStore {
@@ -30,7 +24,7 @@ class PokemonsStore {
 
 		console.log("constructor)");
 
-		for (var co = 1; co <= 20; co++) {
+		for (let co = 1; co <= 20; co++) {
 			fetch("https://pokeapi.co/api/v2/pokemon/" + co)
 				.then(results => {
 					return results.json();
@@ -98,7 +92,7 @@ class PokemonsStore {
 	Get807 = async () => {
 
 		console.log("vizov 807");
-		for (var co = 1; co <= 807; co++) {
+		for (let co = 1; co <= 807; co++) {
 			const response = await fetch("https://pokeapi.co/api/v2/pokemon/" + co)
 			const json = await response.json();
 			this.pokemonsRepeat.push({
@@ -118,10 +112,10 @@ class PokemonsStore {
 	PageBefore807 = async(pageNumber) => {
 
 		this.pokemons = [];
-		var mass = [];
+		let mass = [];
 		this.activePage = pageNumber;
 		console.log("before 807");
-		for (var co = (this.activePage-1) * this.loadCount + 1; co <= ( this.activePage * this.loadCount); co++) {
+		for (let co = (this.activePage-1) * this.loadCount + 1; co <= ( this.activePage * this.loadCount); co++) {
 			if(co > 807)
 			{
 				break;
@@ -178,7 +172,7 @@ class PokemonsStore {
 	
 		// Я ебал ваш материал в ротяку :
 		let inputs = document.querySelectorAll('input[type="checkbox"]');
-		for (var i = 0; i < inputs.length; i++) {
+		for (let i = 0; i < inputs.length; i++) {
 		  inputs[i].checked = true;
 		  inputs[i].click();
 
@@ -215,7 +209,7 @@ class PokemonsStore {
 		this.SearchText = e.target.value;
 		this.pokemons = [];
 		this.activePage = 1;
-
+		this.poksPag = [];
 		// Проверка на пустоту формы и фильтр
 
 		setTimeout(  () => {
@@ -230,7 +224,7 @@ class PokemonsStore {
 				// Проверка чек боксов
 				if (this.typesCheckbox.length !== 0) {
 					this.poksPag = this.poksPag.filter((val) => {
-						var chec = false;
+						let chec = false;
 						val.types.map((item) => {
 							if (this.typesCheckbox.indexOf(item.type.name) !== -1) {
 								chec = true;
@@ -258,17 +252,19 @@ class PokemonsStore {
 	// Проверка чекбоксво
 	CheckBoxPokemon = (event) => {
 
+		this.poksPag = [];
 		this.activePage = 1;
 		// Востановление масива значений
-		if (event.target.checked) {
+	if (event.target.checked) {
 			this.typesCheckbox.push(event.target.value);
 		} else {
-			var num = this.typesCheckbox.indexOf(event.target.value);
+			let num = this.typesCheckbox.indexOf(event.target.value);
 			if (num > -1) {
 				this.typesCheckbox.splice(num, 1);
 			}
 		}
 
+		setTimeout( () => {
 		if (this.SearchText === "" && this.typesCheckbox.length === 0) {
 			this.poksPag = this.pokemonsRepeat.slice(0, this.loadCount);
 		}
@@ -284,7 +280,7 @@ class PokemonsStore {
 
 			if (this.typesCheckbox.length !== 0) {
 				this.poksPag = this.pokemonsRepeat.filter((val) => {
-					var chec = false;
+					let chec = false;
 					val.types.map((item) => {
 						if ((this.typesCheckbox.indexOf(item.type.name) !== -1)) {
 							chec = true;
@@ -303,6 +299,7 @@ class PokemonsStore {
 		}
 			
 		this.pokemons = this.poksPag.slice( 0 , this.loadCount ) ;
+		}, 50);
 
 		}
 	}
@@ -340,7 +337,7 @@ decorate(PokemonsStore, {
 })
 
 // Создание экземпляра 
-var m = new PokemonsStore();
+let m = new PokemonsStore();
 
 // Експорт и привязка контекста
 export default createContext(m);
