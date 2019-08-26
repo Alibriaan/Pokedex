@@ -1,7 +1,7 @@
-import React , {useState}from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
+//import ReactDOM from 'react-dom';
 import { observer } from 'mobx-react';
-import  {observable , computed , decorate} from 'mobx';
+//import  {observable , computed , decorate} from 'mobx';
 
 
 import AppBar from '@material-ui/core/AppBar';
@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { red } from '@material-ui/core/colors';
-import { white } from '@material-ui/core/colors';
+//import { white } from '@material-ui/core/colors';
 
 
 
@@ -45,9 +45,10 @@ import ContactIcon from '@material-ui/icons/Contacts';
 import CodeIcon from '@material-ui/icons/Code';
 import HomeIcon from '@material-ui/icons/Home';
 import InfoIcon from '@material-ui/icons/Info';
+import Box from '@material-ui/core/Box';
 
 
-import { HashRouter as Router , Switch , Route , Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const theme = createMuiTheme({
   palette: {
@@ -70,10 +71,6 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1,
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'block',
-    },
   },
 	button:{
 		  display: 'none',
@@ -89,11 +86,11 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
+    width: '55%',
+    [theme.breakpoints.up('md')]: {
       marginLeft: theme.spacing(1),
       width: 'auto',
+	 
     },
   },
   searchIcon: {
@@ -134,6 +131,10 @@ sideMenuText:{
 	display:"flex",
 	justifyContent: "center",
 	backgroundColor: red,
+},
+stick:{
+  postion: "fixed",
+  top: 0,
 }
 
 }));
@@ -160,6 +161,7 @@ const Header = observer(( props) =>
     left: false,
   	});
 
+   
 
   const toggleDrawer = (side, open) => event => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -168,7 +170,7 @@ const Header = observer(( props) =>
     setState({ ...state, [side]: open });
   };
 	
-	//
+	// 237 строка обнуление необходимо для избежания бага с отображением цвета при повторном заходе в покемона бойцовского типа
 
   const sideList = side => (
 	  <div
@@ -196,7 +198,7 @@ const Header = observer(( props) =>
           </ListItem>
 		</Link>
 		
-		<a  href="https://github.com/WilliaamKing/Pokedex"  style={{textDecoration : 'none'  ,color: "#000"}}>  
+		<a  href="https://github.com/Alibriaan/Pokedex"  style={{textDecoration : 'none'  ,color: "#000"}}>  
           <ListItem button>
             <ListItemIcon><CodeIcon /></ListItemIcon>
             <ListItemText primary="Github"/>
@@ -215,6 +217,7 @@ const Header = observer(( props) =>
 
   return (
 	      <ThemeProvider theme={theme}>
+     <Box className={classes.stick}> 
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar className={classes.tool}>
@@ -231,12 +234,12 @@ const Header = observer(( props) =>
         {sideList('left')}
       </Drawer>
           <Typography className={classes.title} variant="h6" noWrap>
-			<Link to = "/"style={{textDecoration : 'none' , color:"white" }}>  
+			<Link to = "/"style={{textDecoration : 'none' , color:"white" }} onClick={ () => { localStore.pokemon = undefined ; localStore.species = undefined}} >  
 				Pokedex
 			</Link>
           </Typography>
 	  <div className={classes.button} style={{ display: visibility()}}>
-	        <Button  color="inherit" onClick= { () => (setTimeout(localStore.PokemonGet(10) , 1000)) }>10 Pokemons</Button>
+          <Button  color="inherit" onClick= { () => (setTimeout(localStore.PokemonGet(10) , 1000))}>10 Pokemons</Button>
 	        <Button  color="inherit" onClick= { () => (setTimeout(localStore.PokemonGet(20) , 1000)) }>20 Pokemons</Button>
 	        <Button  color="inherit" onClick= { () => (setTimeout(localStore.PokemonGet(50) , 1500)) }>50 Pokemons</Button>
 	  </div>
@@ -246,7 +249,7 @@ const Header = observer(( props) =>
             <div className={classes.searchIcon} >
               <SearchIcon />
             </div>
-            <InputBase disabled={props.disable} onChange={localStore.SearchPokemons}
+            <InputBase disabled={props.disable} value={localStore.SearchText} onChange={localStore.SearchPokemons} id="search"
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
@@ -264,132 +267,132 @@ const Header = observer(( props) =>
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header">
-          <Typography className={classes.heading}>Теги типов покемонов</Typography>
+          <Typography className={classes.heading}>Types tags</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
 	    
       
         <ThemeProvider theme={theme}>
 
-	<FormGroup row className={classes.tagsroot}>
+	<FormGroup row className={classes.tagsroot} >
 
       <FormControlLabel
         control={
-          <Checkbox value="normal"  onClick={localStore.CheckBoxPokemon} color="primary" />
+          <Checkbox value="normal"  id="normal"  onClick={localStore.CheckBoxPokemon}  color="primary" />
         }
         label="normal"
       />
       <FormControlLabel
         control={
-          <Checkbox value="fighting"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="fighting" id="fighting" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="fighting"
       />
       <FormControlLabel
         control={
-          <Checkbox value="flying"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="flying" id="flying" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="flying"
       />
       <FormControlLabel
         control={
-          <Checkbox value="poison"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="poison" id="poison" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="poison"
       />
       <FormControlLabel
         control={
-          <Checkbox value="ground"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="ground"  id="ground" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="ground"
       />
       <FormControlLabel
         control={
-          <Checkbox value="rock"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="rock"  id="rock "onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="rock"
       />
       <FormControlLabel
         control={
-          <Checkbox value="bug"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="bug" id="bug" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="bug"
       />
       <FormControlLabel
         control={
-          <Checkbox value="ghost"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="ghost" id="ghost" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="ghost"
       />
       <FormControlLabel
         control={
-          <Checkbox value="steel"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="steel" id="steel" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="steel"
       />
       <FormControlLabel
         control={
-          <Checkbox value="fire"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="fire" id="fire" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="fire"
       />
       <FormControlLabel
         control={
-          <Checkbox value="water"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="water" id="water" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="water"
       />
       <FormControlLabel
         control={
-          <Checkbox value="grass"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="grass" id="grass"  onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="grass"
       />
       <FormControlLabel
         control={
-          <Checkbox value="electric"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="electric" id="electric" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="electric"
       />
       <FormControlLabel
         control={
-          <Checkbox value="psychic"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="psychic" id="psychic" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="psychic"
       />
       <FormControlLabel
         control={
-          <Checkbox value="ice"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="ice" id="ice" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="ice"
       />
       <FormControlLabel
         control={
-          <Checkbox value="dragon"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="dragon" id="dragon" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="dragon"
       />
       <FormControlLabel
         control={
-          <Checkbox value="dark"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="dark"  id="dark" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="dark"
       />
       <FormControlLabel
         control={
-          <Checkbox value="fairy"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="fairy" id="fairy" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="fairy"
       />
       <FormControlLabel
         control={
-          <Checkbox value="unknown"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="unknown" id="unknown" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="unknown"
       />
       <FormControlLabel
         control={
-          <Checkbox value="shadow"  onClick={localStore.CheckBoxPokemon} color="primary"/>
+          <Checkbox value="shadow" id="shadow" onClick={localStore.CheckBoxPokemon} color="primary"/>
         }
         label="shadow"
       />
@@ -399,7 +402,7 @@ const Header = observer(( props) =>
 
         </ExpansionPanelDetails>
       </ExpansionPanel>
-
+</Box>
 	  </ThemeProvider>
 
  

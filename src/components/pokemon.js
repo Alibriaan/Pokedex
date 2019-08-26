@@ -1,60 +1,79 @@
 import React , {useState} from 'react';
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
 
 
 import { observer } from 'mobx-react';
-import  {observable , computed , decorate} from 'mobx';
+//import  {observable , computed , decorate} from 'mobx';
 import store from '../store/store';
 import { useContext } from "react";
 
 
 import Header from './header';
 import Error from './error';
+import Footer from './footer';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
+//import CardActionArea from '@material-ui/core/CardActionArea';
+//import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
+//import Avatar from '@material-ui/core/Avatar';
 
-import { spacing } from '@material-ui/system';
+/*
+import Grid from '@material-ui/core/Grid';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Radio from '@material-ui/core/Radio';
+import Paper from '@material-ui/core/Paper';
+*/
+
+//import { spacing } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
 import { Zoom } from '@material-ui/core';
+//import { object } from 'prop-types';
+//import { object } from 'prop-types';
+
+//import CircularProgress from '@material-ui/core/CircularProgress';
+//import LinearProgress from '@material-ui/core/LinearProgress';
 
 	
-const useStyles = makeStyles({
+const useStyles = makeStyles( theme => ({
   root:
 	{
-		minHeight: "60%",
+		minHeight: "100vh",
+		
 		display:"flex",
-		justifyContent:"center",
+		flexDirection: "column",
+		alignItems: "center", 
+		justifyContent:"space-around",
 	},
 	
 	card: {
-    minWidth: "80%",
-	maxWidth: "1600px",
+
+		width: "90vw",
+		maxWidth: "1600px",
 	 display:"flex",
      justifyContent:"center", 
   },
 	content:{
+		
 		flexGrow: 1,
 		padding: 0,
-	}, 
+		paddingBottom: "0px", 
+	},
   number: {
 	  display: "flex",
 	  justifyContent: "center",
   },
   
-	types:{
-		display: "flex",
-		justifyContent:"space-around"
-	},
+
 	name:{
 		flexGrow: 1,
+		textAlign: "center",
 		display:"flex",
 		justifyContent: "center"
 	},
@@ -64,12 +83,16 @@ const useStyles = makeStyles({
 
 	},
 	avatarSize:{
-		 width: 300,
-		height: 300,
+		 width: 150,
+		 height: 150,
 		display:"flex",
 		justifyContent: "center",
 		alignItems:"center",
 		
+		[theme.breakpoints.up('md')]: {
+			width: 300,
+			height: 300,
+		},
 
 	},
 	types:
@@ -95,7 +118,43 @@ const useStyles = makeStyles({
 		textAlign:"center ",
 		boxShadow: " 0px 0px 10px 0.5px rgba(0,0,0,0.2)"
 	},
-});
+	story:
+	{
+		textAlign: "center",
+	},
+	skils:{
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	statsBarRoot:
+	{
+		display: "flex",
+		justifyContent: "space-around",
+		alignItems: "center",
+	},
+
+	statsBarName:{
+	
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-around",
+	},
+
+	paper:{
+		padding: "2.5px 0px 2.5px 0px",
+	},
+	bar:
+	{
+	display: "flex",
+		justifyContent: "space-between",
+	},
+	cardFooter:
+	{
+		height: 104,
+	}
+}));
 
 const colors = {
   bug: 'B1C12E',
@@ -118,10 +177,19 @@ const colors = {
   water: '3295F6'
 };
 
+
+
+
 const CurrentPokemon = observer((props) => 
 {
-		const localStore = useContext(store)
-		const classes = useStyles()
+	const localStore = useContext(store)
+	const classes = useStyles()
+	const [checked] = useState(true);
+
+
+
+
+
 	    var fight = (prop) =>
 		{
 			if(prop === "fighting")
@@ -136,19 +204,61 @@ const CurrentPokemon = observer((props) =>
 	
 		var bgcolor = (prop) =>
 		{
+
+			var first ,second;
 			if( prop.types.length > 1)
 				{
-					return  "linear-gradient( to right ," + "#" +colors[prop.types[0].type.name]  + " 50% ,  #" + colors[prop.types[1].type.name] +" 50%)";
+
+					first = prop.types[0].type.name === "fighting" ? "C0C0C0" : colors[ prop.types[0].type.name];
+					second =prop.types[1].type.name === "fighting" ? "C0C0C0": colors[ prop.types[1].type.name];
+					return  "linear-gradient( to right , #" +  first  + " 50% ,  #" +  second +" 50%)";
 				}
-			else
+
+				else
 				{
-					return  "#" + colors[prop.types[0].type.name];
+					first = prop.types[0].type.name === "fighting" ? "C0C0C0" : colors[ prop.types[0].type.name];
+					return  "#" + first;
 				}
 		}
 		
 		
-		  const [checked, setChecked] = useState(true);
-		//  const [disable, setDisable] = useState(true);
+		var text = () =>
+		{
+			var check = false;
+
+			var tex = "Hello";
+		
+		    localStore.species.flavor_text_entries.filter( (item) => {
+				if(check === false && item.language.name === "en")
+				{
+					tex = item.flavor_text;
+					check = true;
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+
+			});
+			return tex;
+		}
+
+
+		var generation = () =>
+		{
+			var generation , number;
+			var index = localStore.species.generation.name.indexOf("-");
+
+			generation = localStore.species.generation.name[0].toUpperCase() + localStore.species.generation.name.slice(1 , index);
+				number = localStore.species.generation.name.slice(index+1);
+				number = number.toUpperCase();
+
+			return generation + "-" + number;
+		}
+
+	
+		
 
 			  
 	if( localStore.pokemon === undefined)
@@ -175,11 +285,15 @@ const CurrentPokemon = observer((props) =>
 	}
 	else
 		{
+
+			// Нижнее условие фиксит то что карточка может не зарендерится на страницу
 	  return (
-				   <Box>
+
+		 (localStore.pokemon !== undefined ) && (localStore.species !== undefined ) &&
+		<Box  className={classes.main}>
 		<Header disable={true}/>
 	   <Zoom in={checked} timeout={{ enter: 400}}>   
-		 <Box  className={classes.root} mt={2} >
+		 <Box  className={classes.root} mt={2} mb={2} mr={2} ml={2}>
 		   <Card className={classes.card} >
 		     <CardContent className={classes.content}>
 		  
@@ -192,7 +306,7 @@ const CurrentPokemon = observer((props) =>
 		  </Typography >
 				   </Box>
 		    
-		  <Typography className={classes.avatar}>
+				   <Typography className={classes.avatar}>
 		  <CardMedia className={classes.avatarSize} image={localStore.pokemon.sprites.front_default} title={localStore.pokemon.name} />
 		   </Typography>
 		    
@@ -200,235 +314,168 @@ const CurrentPokemon = observer((props) =>
 		  	{localStore.pokemon.types.map((item) => (
 	  		<Box ml={1} mr={1} style={{backgroundColor : "#" + colors[item.type.name] , color: fight(item.type.name) }} className={classes.typesName}>{item.type.name}</Box>
 		  
-	  ))}
+	  		))}
 		  </Typography>
+
+			<Typography variant="h5" >
+				<Box mt={3} mb={3} ml={2} mr={2}>
+			 <span className = "count">{generation()}</span>
+				</Box>
+			</Typography>
+
+
+		 
+			<Box mt={3} mb={1} ml={2} mr={6}>
+		   <Typography  variant="h4">
+		   <span className = "count">{localStore.species.genera[2].genus}</span>
+		   <Typography  variant="h6">
+		   <span className = "count">{text()}</span>	
+		   </Typography>
+		   </Typography>		
+				</Box>
+
+
+
+				<Box  pt={1} pb={1} mt={1} mb={1} style={{background: bgcolor(localStore.pokemon) , color: "White" }}>
+		  <Typography className={classes.number}   variant="h4">
+				Stats
+		  </Typography >
+		</Box>
+
+		
+
+		  <Box className = {classes.skils} pt={6} pb={6}>
+
+			  <Typography variant="h6">
+			  <span>HP:</span> <span className = "count">{localStore.pokemon.stats[5].base_stat}</span>
+			  </Typography>
+			  <Typography variant="h6">
+			  <div><span>Attack:</span> <span className = "count">{localStore.pokemon.stats[4].base_stat}</span></div>
+			  </Typography>
+			  <Typography variant="h6">
+			  <div><span>Speed:</span> <span className = "count">{localStore.pokemon.stats[0].base_stat}</span></div>
+			  </Typography>
+			  <Typography variant="h6">
+			  <div><span>Defense:</span> <span className = "count">{localStore.pokemon.stats[3].base_stat}</span></div>
+			  </Typography>
+			  <Typography variant="h6">
+			  <div><span>Sp Atk:</span> <span className = "count">{localStore.pokemon.stats[2].base_stat}</span></div>
+			  </Typography>
+			  <Typography variant="h6">
+			  <div><span>Sp Def:</span> <span className = "count">{localStore.pokemon.stats[1].base_stat}</span></div>
+			  </Typography>
+			</Box>
+
+			  <Box  pt={1} pb={1} mt={1} mb={6} style={{background: bgcolor(localStore.pokemon) , color: "White" }}>
+		  <Typography className={classes.number}   variant="h4">
+				Informations
+		  </Typography >
+
+		</Box>
+
+		<Box mt={3} mb={3} ml={2} mr={6}>
+			
+		<Typography  variant="h6" >
+		  <span>Base Happiness:</span> <span className = "count">{localStore.species.base_happiness}</span>
+
+		   </Typography>	
+
+		   <Typography  variant="h6">
+		   <span>Egg groups:</span> <span className = "count">{localStore.species.egg_groups.map( (item) => ( item.name + " "  )) }</span>
+		   </Typography>
+
+		   <Typography  variant="h6">
+		   <span>Height:</span> <span className = "count">{localStore.pokemon.height}</span>
+		   </Typography>
+			
+		   <Typography  variant="h6">
+		   <span>Weigth:</span> <span className = "count">{localStore.pokemon.weight}</span>
+		   </Typography>
+			
+		   <Typography  variant="h6">
+		   <span>Gender rate:</span> <span className = "count">{localStore.species.gender_rate}</span>
+		   </Typography>
+			
+
+		   <Typography  variant="h6">
+		   <span>Capture rate:</span> <span className = "count">{localStore.species.capture_rate}</span>
+		   </Typography>
+			
+
+		</Box> 
+
       	</CardContent>
 </Card>
 </Box>
 </Zoom>							
-						
-	</Box>							
+
+		<Footer />				
+	</Box>	
+			  					
 	  );
 }});
 
 
-
-// статы
-/*
-	{localStore.pokemon.stats.map( (item) => (
-			<Box component="span" className={classes.statname}>
-			<h4>{item.stat.name}</h4>
-			<Box className={classes.stats}>
-		  			<Box className={classes.fillStats} style={ {height: "100%", width: item.base_stat + "%" } }>
-						{item.base_stat}
-		  			</Box>
-		  			<Box className={classes.emptyStats} style={ {height: "100%", width:  (100 - item.base_stat  ) + "%" } }>
-					</Box>
-				</Box>
-			</Box>
-))}		
-*/
-
-/*
-		<Typography className={classes.statsbox}   variant="h4">
-				{localStore.pokemon.stats.map( (item) => (
-			<Box className={classes.stats}>
-		  			<Box className={classes.fillStats} style={ {height: "100%", width: item.base_stat + "%" } }>
-		  			</Box>
-		  			<Box className={classes.emptyStats} style={ {height: "100%", width:  (100 - item.base_stat  ) + "%" } }>
-					</Box>
-				</Box>
-))}						
-		</Typography>
-*/
-     // можно юзать для статов
-		/*
-		
-		<Avatar alt="Remy Sharp" src={localStore.pokemon.sprites.front_default} className={classes.avatarSize} />		
-		
-		<Box className={classes.stats}>
-		  			<Box className={classes.fillStats} style={ {height: "100%", width: localStore.pokemon.stats[0].base_stat + "%" } }>
-		  			</Box>
-		  			<Box className={classes.emptyStats} style={ {height: "100%", width:  (100 - localStore.pokemon.stats[0].base_stat  ) + "%" } }>
-					</Box>
-				</Box>
-		*/
+//		   <span className = "count">{localStore.species.flavor_text_entries[1].flavor_text}</span>	
+//			<div><span>generation:</span> <span className = "count">{localStore.species.generation.name}</span></div>
 
 
-
-/*
-*/
-
-//Главная часть
-/*  
- <Typography className={classes.number}   variant="h4">
-		  {localStore.pokemon.id} 
-		  </Typography>
-		  
-		  		
-		  <Typography variant="h3"  className={classes.name}>
-		  {localStore.pokemon.name} 
-		  </Typography >
-		    
-		  <Typography className={classes.avatar}>
-		  <CardMedia className={classes.avatarSize} image={localStore.pokemon.sprites.front_default} title={localStore.pokemon.name} />
-		   </Typography>
-		    
-		 <Typography className={classes.types}   variant="h5">
-		  	{localStore.pokemon.types.map((item) => (
-	  		<Box>{item.type.name}</Box>
-		  
-	  ))}
-		  </Typography>
-		  
-		  */
 export default CurrentPokemon;
 
-
-
-	/*
-			var pochinka = (znachenie) =>
-			{
-			  localStore.CurrentPokemonPage(znachenie); 
-			}
-			
-			pochinka(props.match.params.id);
-			*/
-	
-		/*
-		if( localStore.pokemon === undefined)
-		{
-			
-			var pochinka = (znachenie) =>
-			{
-			  localStore.CurrentPokemonPage(znachenie); 
-			}
-			
-			pochinka(props.match.params.id);
-			
-			console.log( "Znachemie " + localStore.pokemon);
-			
-			var test = () =>{
-			if(localStore.pokemon === undefined)
-				{
-					var errs = () =>
-					{
-						return (
-						<Error error_type="INCORRECT POKEMON SELECTED"/>
-					);
-				}
-					setTimeout(errs() , 1000);
-
-				}
-			}
-			
-			test();
-			}
-			
-	
-	*/
-			/*
-			if(isNaN(props.match.params.id))
-				{
-					
-					return (
-						<Error error_type="INCORRECT POKEMON SELECTED"/>
-					)
-
-			else
-				{
-					console.log("preobrazovano");
-					
-			var pochinka = (znachenie) =>
-			{
-			  localStore.CurrentPokemonPage(znachenie); 
-			}
-			
-			pochinka(props.match.params.id);
-
-					if(localStore.pokemon === undefined)
-						{
-							var err = () =>
-							{
-							return (<Error error_type="NOT CONNECTION"/>);
-							}
-							setTimeout(err() , 1000);
-						}
-					
-				}
-			
-			*/
-
-
-
 /*
-		fetch("https://pokeapi.co/api/v2/pokemon/"+1).then(results => { return results.json();
-    	}).then(data => {
-			console.log(data);
-			pokemons.push(data);
-			if(pokemons.length > 0)
-			{
-					console.log("eto ne podkluchenie "); // Все норм присвоить значение
-					fetch("https://pokeapi.co/api/v2/pokemon/"+props.match.params.id).then(resultss => { return resultss.json();
-    				})
-					.then(dataa => {
-					console.log(dataa);
-					pokemons.push(dataa);
-					if(pokemons.length > 1)
-					{
-					console.log("vse norm po znacheniu");
-					pochinka(props.match.params.id);
-					}
-					})
-					.catch(error => {
-						
-						if( error != undefined)
-							{
-								console.log("hrenovoe znachenie");
-								pochinka("textError");
-							}
-					});
-				
-				console.log(localStore.pokemon);
-				if(localStore.pokemon === "textError")
-					{
-						return(<Error error_type="INCORRECT POKEMON SELECTED"/>);
-					}
-				
-				}
-				else
-					{
-						console.log("ne konektit");
-					}
-    	})	
+
+	<Box mt={3} mb={3} ml={2} mr={2}>
+
+
+
+ <Grid direction="column"container spacing={2}>
+
+			<Grid container   item   className={classes.bar}>
+				<Typography>HP:</Typography>
+			<Grid item xs={6}>
+          <Paper className={classes.paper}>{localStore.pokemon.stats[5].base_stat}</Paper>
+        </Grid>
+        </Grid>
+		
+		<Grid  item container  className={classes.bar}>
+		<Typography>Attack:</Typography>
+			<Grid item xs={6}>
+          <Paper className={classes.paper}>{localStore.pokemon.stats[4].base_stat}</Paper>
+        </Grid>
+        </Grid>
+
+		<Grid item container  className={classes.bar}>
+		<Typography>Speed:</Typography>
+			<Grid item xs={6}>
+          <Paper className={classes.paper}>{localStore.pokemon.stats[0].base_stat}</Paper>
+        </Grid>
+        </Grid>
+		
+		<Grid  item container  className={classes.bar}>
+		<Typography>Defense:</Typography>
+			<Grid item xs={6}>
+          <Paper className={classes.paper}>{localStore.pokemon.stats[3].base_stat}</Paper>
+        </Grid>
+        </Grid>
+
+		<Grid item container  className={classes.bar}>
+		<Typography>Sp Atk:</Typography>
+
+			<Grid item xs={6}>
+          <Paper className={classes.paper}>{localStore.pokemon.stats[2].base_stat}</Paper>
+        </Grid>
+        </Grid>
+		
+		<Grid  item container  className={classes.bar}>
+		<Typography>Sp Def:</Typography>
+			<Grid item xs={6} >
+          <Paper className={classes.paper}>{localStore.pokemon.stats[1].base_stat}</Paper>
+        </Grid>
+        </Grid>
+		
+
+
+
+		</Grid>	
+  		</Box> 	
 */
-
-
-/*
-		/*
-			
-			console.log(pokemons);
-			
-			
-			else
-				{
-					
-						fetch("https://pokeapi.co/api/v2/pokemon/"+1).then(results => { return results.json();
-    					}).then(data => {
-							//pokemons.push(data);
-    						})
-				
-					if(typeof pokemons[1] != null) // Проблемы с подключением иначе не правильное значение
-						{
-							console.log("ne tot pokemon")
-							return (<Error error_type="INCORRECT POKEMON SELECTED"/>);
-						}
-					else
-						{
-							return (<Error error_type="NOT CONNECTION"/>);
-						}
-				}
-			
-			console.log(pokemons);
-			*/
-

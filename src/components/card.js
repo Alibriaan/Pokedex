@@ -2,14 +2,14 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
+//import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
+//import CardMedia from '@material-ui/core/CardMedia';
+//import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 
-import { spacing } from '@material-ui/system';
+//import { spacing } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
 
 import { Link } from "react-router-dom";
@@ -40,15 +40,7 @@ const colors = {
 };
 
 const useStyles = makeStyles({
-  card: {
-    maxWidth: 200,
-	maxHeight: 400,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
+ 
   number: {
 	  display: "flex",
 	  justifyContent: "center",
@@ -62,8 +54,12 @@ const useStyles = makeStyles({
 		justifyContent:"space-around"
 	},
 	name:{
+		flexGrow: 1,
 		display:"flex",
-		justifyContent: "center"
+		justifyContent: "center",
+		textAlign: "center",
+		//fontSize: "calc( (100vw - Vmin)/(Vmax - Vmin) * (Fmax - Fmin) + Fmin)",
+		
 	},
 	avatar:{
 		display:"flex",
@@ -74,11 +70,13 @@ const useStyles = makeStyles({
 		 width: 120,
     height: 120,
 	},
+	/*
 	types:{
 		flexGrow: 1,
 		display: "flex",
 		justifyContent: "space-around",
 	},
+	*/
 	typesName:
 	{
 		display: "block",
@@ -86,7 +84,14 @@ const useStyles = makeStyles({
 		width: "50px",
 		textAlign:"center ",
 		boxShadow: " 0px 0px 10px 0.5px rgba(0,0,0,0.2)"
-	}
+	},
+
+	  card: {
+		  display:"block",
+		margin: " 8px 6px 10px 8px",
+		Width: 260,
+		Height:  340,
+  },
 });
 
 
@@ -113,20 +118,18 @@ const PokeCard = observer((props) =>
 				  }
 		  }
 		  
-  const bull = <span className={classes.bullet}>•</span>;
 
   return (
-	  <Box mt={2}  ml={1} mr={1} mb={2}>
-    <Card className={classes.card} >
-	  <Link to ={props.lin} style={{textDecoration : 'none' , color: "black"}} onClick= { () => localStore.CurrentPokemon(props.pok) }>  
+    <Card className={classes.card}>
+	  	<Link to ={props.lin} style={{textDecoration : 'none' , color: "black"}} onClick= { () => (  localStore.CurrentPokemonPage(props.number)) }>  
 	  <CardActionArea>
 
-      <CardContent>
+      <CardContent >
 
         <Typography className={classes.number} color="textSecondary" gutterBottom>
           {props.number}
         </Typography>
-        <Typography variant="h5" component="h2" className={classes.name}>
+        <Typography variant="h5" component="h3" className={classes.name}>
           {props.name}
         </Typography >
 	  <Box className={classes.avatar}  >
@@ -142,7 +145,6 @@ const PokeCard = observer((props) =>
 
     </Card>
 
-	  </Box>
   );
 });
 
