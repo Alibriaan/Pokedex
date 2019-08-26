@@ -176,7 +176,7 @@ class PokemonsStore {
 	// Функция выбора количества отображаемых покемонов (Пока что без количества страниц)
 	PokemonGet = (value = 20) => {
 	
-		// Я ебал ваш материал в ротяку :*
+		// Я ебал ваш материал в ротяку :
 		let inputs = document.querySelectorAll('input[type="checkbox"]');
 		for (var i = 0; i < inputs.length; i++) {
 		  inputs[i].checked = true;
@@ -248,7 +248,7 @@ class PokemonsStore {
 				}
 	
 			}
-		this.pokemons = this.poksPag.slice( 0 , this.loadCount-1 ) ;
+		this.pokemons = this.poksPag.slice( 0 , this.loadCount) ;
 
 		}, 100);
 	
