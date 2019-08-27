@@ -1,0 +1,16 @@
+{
+    "extends": "standard",
+
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },    
+
+    "plugins": ["eslint-plugin-standard"], 
+    "globals": { "fetch": false },
+  }
+  // Это должен быть eslint-config-standart но я не уверен

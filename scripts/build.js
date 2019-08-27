@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 'use strict';
 
 // Do this as the first thing so that any code reading it knows the right env.
@@ -13,7 +14,6 @@ process.on('unhandledRejection', err => {
 
 // Ensure environment variables are read.
 require('../config/env');
-
 
 const path = require('path');
 const chalk = require('react-dev-utils/chalk');
@@ -119,7 +119,7 @@ checkBrowsers(paths.appPath, isInteractive)
   });
 
 // Create the production build and print the deployment instructions.
-function build(previousFileSizes) {
+function build (previousFileSizes) {
   // We used to support resolving modules according to `NODE_PATH`.
   // This now has been deprecated in favor of jsconfig/tsconfig.json
   // This lets you use absolute paths in imports inside large monorepos:
@@ -144,7 +144,7 @@ function build(previousFileSizes) {
         }
         messages = formatWebpackMessages({
           errors: [err.message],
-          warnings: [],
+          warnings: []
         });
       } else {
         messages = formatWebpackMessages(
@@ -177,15 +177,15 @@ function build(previousFileSizes) {
       return resolve({
         stats,
         previousFileSizes,
-        warnings: messages.warnings,
+        warnings: messages.warnings
       });
     });
   });
 }
 
-function copyPublicFolder() {
+function copyPublicFolder () {
   fs.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
-    filter: file => file !== paths.appHtml,
+    filter: file => file !== paths.appHtml
   });
 }
