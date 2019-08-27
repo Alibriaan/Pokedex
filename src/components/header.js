@@ -179,7 +179,7 @@ const Header = observer((props) => {
           </ListItem>
         </a>
       </List>
-      <List className={classes.mobileButton}>
+      <List className={classes.mobileButton} style={{ display: props.disable === true ? 'none' : '' }}>
         <Divider />
         <ListItem button onClick= { () => (localStore.PokemonGet(10))}>
           <ListItemIcon><SmartIcon /></ListItemIcon>
